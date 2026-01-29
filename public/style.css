@@ -13,7 +13,7 @@ body {
   color: white;
   padding: 18px;
   text-align: center;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: bold;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
@@ -43,14 +43,14 @@ input[type="text"]:focus {
 
 /* النص الافتراضي (بحث) */
 input::placeholder {
-  color: #d32f2f;
+  color: #000000;
   opacity: 0.7;
 }
 
 /* ===== زر البحث ===== */
 button {
   margin-top: 15px;
-  background-color: #009688;
+  background-color: #5e0707;
   color: white;
   border: none;
   padding: 10px 26px;
@@ -60,7 +60,7 @@ button {
 }
 
 button:hover {
-  background-color: #00796b;
+  background-color: #5e0707;
 }
 
 /* ===== بطاقة النتيجة ===== */
