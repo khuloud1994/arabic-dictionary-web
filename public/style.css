@@ -11,7 +11,7 @@ body {
 .nav-rose {
   background: #0d47a1;       /* أزرق */
   color: white;
-  padding: 18px;
+  padding: 22px;
   text-align: center;
   font-size: 24px;
   font-weight: bold;
@@ -76,7 +76,7 @@ button:hover {
 .word {
   font-size: 22px;
   font-weight: bold;
-  color: #d32f2f;
+  color: #5e0707;
 }
 
 /* المعنى */
