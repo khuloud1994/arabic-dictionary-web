@@ -1,3 +1,88 @@
-.nav-rose { background: #0d47a1; }
-input { text-align: right; }
-.card { margin-top: 20px; }
+/* ===== إعدادات عامة ===== */
+body {
+  font-family: "Tahoma", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+  direction: rtl;
+}
+
+/* ===== الشريط العلوي ===== */
+.nav-rose {
+  background: #0d47a1;       /* أزرق */
+  color: white;
+  padding: 18px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* ===== منطقة البحث ===== */
+.search-container {
+  padding: 30px;
+}
+
+/* مربع إدخال البحث */
+input[type="text"] {
+  width: 100%;
+  border: 2px solid #d32f2f;      /* أحمر */
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 16px;
+  outline: none;
+  text-align: right;
+  background-color: white;
+}
+
+/* عند الضغط على مربع البحث */
+input[type="text"]:focus {
+  border-color: #b71c1c;          /* أحمر أغمق */
+  box-shadow: 0 0 6px rgba(211, 47, 47, 0.4);
+}
+
+/* النص الافتراضي (بحث) */
+input::placeholder {
+  color: #d32f2f;
+  opacity: 0.7;
+}
+
+/* ===== زر البحث ===== */
+button {
+  margin-top: 15px;
+  background-color: #009688;
+  color: white;
+  border: none;
+  padding: 10px 26px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #00796b;
+}
+
+/* ===== بطاقة النتيجة ===== */
+.card {
+  margin-top: 20px;
+  padding: 18px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+/* الكلمة */
+.word {
+  font-size: 22px;
+  font-weight: bold;
+  color: #d32f2f;
+}
+
+/* المعنى */
+.meaning {
+  font-size: 16px;
+  margin-top: 8px;
+  color: #333;
+  line-height: 1.6;
+}
