@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>قاموس عربي</title>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <nav class="nav-rose">
+    <div class="nav-wrapper">
+      <a class="brand-logo center">قاموس عربي</a>
+    </div>
+  </nav>
+
+  <div class="container" style="margin-top:40px;">
+    <form id="searchForm" class="row">
+      <div class="input-field col s12 m9">
+        <input id="query" type="text" placeholder="بحث" autofocus />
+        <label for="query">بحث</label>
+      </div>
+
+      <div class="col s12 m3" style="margin-top:18px;">
+        <button class="btn waves-effect waves-light teal" style="width:100%;" type="submit">بحث</button>
+      </div>
+    </form>
+
+    <div class="card">
+      <div class="card-content" style="text-align:right;">
+        <h5 id="wordDisp"></h5>
+        <p id="meaningDisp"></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
