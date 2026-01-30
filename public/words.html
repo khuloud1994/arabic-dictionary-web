@@ -2,20 +2,101 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8">
-  <title>الكلمات المحفوظة</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>إدارة الكلمات</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <nav class="nav-rose">
   <div class="nav-wrapper">
-    <span class="brand-logo center">📚 الكلمات المحفوظة</span>
+    <span class="brand-logo center">📚 إدارة الكلمات</span>
   </div>
 </nav>
 
 <div class="container" style="margin-top:40px">
-  <h5 id="counter"></h5>
-  <ul id="wordsList"></ul>
+  <div class="row" style="margin-bottom:10px;">
+    <div class="col s12 m6">
+      <div class="card-panel teal lighten-5" style="padding:14px 18px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+          <span style="font-weight:600;">إجمالي الكلمات</span>
+          <span id="counter" style="font-size:18px;"></span>
+        </div>
+      </div>
+    </div>
+    <div class="col s12 m6" style="display:flex; align-items:center; justify-content:flex-end;">
+      <button id="addWordBtn" class="btn waves-effect waves-light teal">➕ إضافة كلمة</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="input-field col s12 m8">
+      <input id="searchInput" type="text" placeholder="ابحثي عن كلمة..." />
+      <label for="searchInput">بحث</label>
+    </div>
+  </div>
+
+  <div class="row">
+    <form id="wordForm" class="col s12">
+      <input id="originalWord" type="hidden" />
+
+      <div class="input-field col s12 m4">
+        <input id="word" type="text" placeholder="كلمة" />
+        <label for="word">كلمة</label>
+      </div>
+
+      <div class="input-field col s12 m8">
+        <input id="meaning" type="text" placeholder="المعنى" />
+        <label for="meaning">المعنى</label>
+      </div>
+
+      <div class="input-field col s12 m6">
+        <input id="imageUrl" type="text" placeholder="رابط الصورة (اختياري)" />
+        <label for="imageUrl">رابط الصورة (اختياري)</label>
+      </div>
+
+      <div class="file-field input-field col s12 m6">
+        <div class="btn">
+          <span>رفع صورة (Cloudinary)</span>
+          <input id="cloudinaryFile" type="file" accept="image/*" />
+        </div>
+        <div class="file-path-wrapper">
+          <input class="file-path validate" type="text" placeholder="اختاري صورة من جهازك" />
+        </div>
+        <p id="uploadMsg" style="margin-top:6px;"></p>
+      </div>
+
+      <div class="col s12" style="margin-top:-6px;">
+        <div id="imagePreviewWrap" class="image-wrap hidden">
+          <img id="imagePreview" alt="معاينة الصورة" />
+        </div>
+      </div>
+
+      <div class="col s12" style="margin-top:10px;">
+        <button class="btn waves-effect waves-light teal" type="submit">حفظ</button>
+        <button id="cancelEdit" class="btn-flat" type="button">إلغاء</button>
+        <span id="msg" style="margin-right:12px;"></span>
+      </div>
+    </form>
+  </div>
+
+  <div class="row">
+    <div class="col s12">
+      <table class="highlight responsive-table">
+        <thead>
+          <tr>
+            <th>الكلمة</th>
+            <th>المعنى</th>
+            <th>الصورة</th>
+            <th>إجراءات</th>
+          </tr>
+        </thead>
+        <tbody id="wordsList"></tbody>
+      </table>
+      <p id="emptyState" style="margin-top:12px;"></p>
+    </div>
+  </div>
 </div>
 
 <script src="words.js"></script>
