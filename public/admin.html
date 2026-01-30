@@ -33,14 +33,19 @@
           <input id="imageUrl" type="text" placeholder="رابط الصورة (اختياري)" />
           <label for="imageUrl">رابط الصورة</label>
         </div>
-
         <div class="file-field input-field col s12">
           <div class="btn">
-            <span>رفع صورة</span>
-            <input id="imageFile" type="file" accept="image/*" />
+            <span>رفع صورة (Cloudinary)</span>
+            <input id="cloudinaryFile" type="file" accept="image/*" />
           </div>
           <div class="file-path-wrapper">
             <input class="file-path validate" type="text" placeholder="اختاري صورة من جهازك" />
+          </div>
+          <p id="uploadMsg" style="margin-top:6px;"></p>
+        </div>
+        <div class="col s12" style="margin-top:-6px;">
+          <div id="imagePreviewWrap" class="image-wrap hidden">
+            <img id="imagePreview" alt="معاينة الصورة" />
           </div>
         </div>
 

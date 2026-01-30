@@ -5,3 +5,15 @@ input {
 }
 
 .card { margin-top: 20px; }
+
+.image-wrap {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.image-wrap img {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.hidden { display: none; }

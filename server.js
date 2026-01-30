@@ -2,7 +2,6 @@ require("dotenv").config();
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const multer = require("multer");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -14,31 +13,6 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 const DB_PATH = path.join(__dirname, "db.json");
-const PUBLIC_DIR = path.join(__dirname, "public");
-const UPLOADS_DIR = path.join(__dirname, "uploads");
-
-if (!fs.existsSync(UPLOADS_DIR)) {
-  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => cb(null, UPLOADS_DIR),
-  filename: (_req, file, cb) => {
-    const ext = path.extname(file.originalname || "");
-    const base = path.basename(file.originalname || "image", ext);
-    const safe = base.replace(/[^\w.-]/g, "_");
-    cb(null, `${Date.now()}_${safe}${ext}`);
-  },
-});
-
-const upload = multer({ storage });
-
-app.use("/uploads", express.static(UPLOADS_DIR));
-
-// Explicit admin route for platforms that don't serve static files as expected
-app.get(["/admin", "/admin.html"], (_req, res) => {
-  res.sendFile(path.join(PUBLIC_DIR, "admin.html"));
-});
 
 function readDb() {
   if (!fs.existsSync(DB_PATH)) {
@@ -66,33 +40,18 @@ app.get("/api/words", (req, res) => {
     return res.status(404).json({ error: "Not found" });
   }
 
-  const entry = db[q];
-  if (typeof entry === "string") {
-    return res.json({ word: q, meaning: entry, imageUrl: "" });
-  }
-
-  res.json({
-    word: q,
-    meaning: entry?.meaning || "",
-    imageUrl: entry?.imageUrl || "",
-  });
+  res.json({ word: q, meaning: db[q] });
 });
 
 /* ===== إضافة كلمة ===== */
-app.post("/api/words", upload.single("image"), (req, res) => {
-  const { word, meaning, imageUrl } = req.body;
+app.post("/api/words", (req, res) => {
+  const { word, meaning } = req.body;
   if (!word || !meaning) {
     return res.status(400).json({ error: "Missing data" });
   }
 
   const db = readDb();
-  const storedImageUrl = req.file
-    ? `/uploads/${req.file.filename}`
-    : (imageUrl || "").trim();
-  db[word.trim()] = {
-    meaning: meaning.trim(),
-    imageUrl: storedImageUrl,
-  };
+  db[word.trim()] = meaning.trim();
   writeDb(db);
 
   res.json({ success: true });
@@ -107,19 +66,10 @@ app.delete("/api/words/:word", (req, res) => {
 });
 
 /* ===== تعديل كلمة ===== */
-app.put("/api/words/:word", upload.single("image"), (req, res) => {
-  const { meaning, imageUrl } = req.body;
+app.put("/api/words/:word", (req, res) => {
+  const { meaning } = req.body;
   const db = readDb();
-  const prev = db[req.params.word];
-  const prevImageUrl =
-    prev && typeof prev !== "string" ? (prev.imageUrl || "") : "";
-  const storedImageUrl = req.file
-    ? `/uploads/${req.file.filename}`
-    : (imageUrl ? imageUrl.trim() : prevImageUrl);
-  db[req.params.word] = {
-    meaning: (meaning || "").trim(),
-    imageUrl: storedImageUrl,
-  };
+  db[req.params.word] = meaning;
   writeDb(db);
   res.json({ success: true });
 });
@@ -163,19 +113,12 @@ app.post("/api/images", async (req, res) => {
       });
     }
 
-    const item = data?.data?.[0];
-    const b64 = item?.b64_json;
-    const url = item?.url;
-
-    if (b64) {
-      return res.json({ imageDataUrl: `data:image/png;base64,${b64}` });
+    const b64 = data?.data?.[0]?.b64_json;
+    if (!b64) {
+      return res.status(502).json({ error: "No image data returned" });
     }
 
-    if (url) {
-      return res.json({ imageUrl: url });
-    }
-
-    return res.status(502).json({ error: "No image data returned" });
+    res.json({ imageDataUrl: `data:image/png;base64,${b64}` });
   } catch (err) {
     res.status(500).json({ error: "Image generation error" });
   }

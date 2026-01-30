@@ -6,9 +6,11 @@ form.addEventListener("submit", (e) => {
 
   const wordEl = document.getElementById("word");
   const meaningEl = document.getElementById("meaning");
+  const imageUrlEl = document.getElementById("imageUrl");
 
   const word = (wordEl?.value || "").trim();
   const meaning = (meaningEl?.value || "").trim();
+  const imageUrl = (imageUrlEl?.value || "").trim();
 
   msg.textContent = "";
 
@@ -18,20 +20,24 @@ form.addEventListener("submit", (e) => {
     return;
   }
 
-  let words = JSON.parse(localStorage.getItem("my_dictionary")) || [];
+  try {
+    const res = await fetch("/api/words", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ word, meaning, imageUrl }),
+    });
 
-  // منع التكرار
-  if (words.some(w => (w.word || "").trim() === word)) {
-    msg.textContent = "⚠️ الكلمة موجودة مسبقًا";
-    msg.style.color = "orange";
-    return;
+    if (!res.ok) {
+      msg.textContent = "⚠️ لم يتم الحفظ. تحققي من البيانات.";
+      msg.style.color = "orange";
+      return;
+    }
+
+    msg.textContent = "✅ تم حفظ الكلمة بنجاح";
+    msg.style.color = "green";
+    form.reset();
+  } catch {
+    msg.textContent = "⚠️ حدث خطأ في الاتصال بالخادم";
+    msg.style.color = "red";
   }
-
-  words.push({ word, meaning });
-  localStorage.setItem("my_dictionary", JSON.stringify(words));
-
-  msg.textContent = "✅ تم حفظ الكلمة بنجاح";
-  msg.style.color = "green";
-
-  form.reset();
 });
