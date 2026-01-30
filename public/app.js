@@ -13,27 +13,13 @@ function clearImage() {
   imageWrap.classList.add("hidden");
 }
 
-async function generateImage(word, meaning) {
-  clearImage();
-
-  try {
-    const prompt = `Create a clean illustration that represents: ${word} — ${meaning}.`;
-    const res = await fetch("/api/images", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt }),
-    });
-
-    if (!res.ok) return;
-
-    const data = await res.json();
-    if (!data?.imageDataUrl) return;
-
-    imageEl.src = data.imageDataUrl;
-    imageWrap.classList.remove("hidden");
-  } catch {
+function showImage(url) {
+  if (!url) {
     clearImage();
+    return;
   }
+  imageEl.src = url;
+  imageWrap.classList.remove("hidden");
 }
 
 form.addEventListener("submit", async (e) => {
@@ -49,7 +35,7 @@ const found = myWords.find(item => item.word === q);
 if (found) {
   wordDisp.textContent = `الكلمة: ${found.word}`;
   meaningDisp.textContent = `المعنى: ${found.meaning}`;
-  generateImage(found.word, found.meaning);
+  showImage(found.imageUrl || "");
   return; // مهم: نوقف هنا ولا نذهب للسيرفر
 }
 
@@ -71,7 +57,7 @@ if (found) {
     const data = await res.json();
     wordDisp.textContent = `الكلمة: ${data.word}`;
     meaningDisp.textContent = `المعنى: ${data.meaning}`;
-    generateImage(data.word, data.meaning);
+    showImage(data.imageUrl || "");
   } catch {
     meaningDisp.textContent = "حدث خطأ في الاتصال بالخادم";
     clearImage();

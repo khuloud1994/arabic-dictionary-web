@@ -40,18 +40,25 @@ app.get("/api/words", (req, res) => {
     return res.status(404).json({ error: "Not found" });
   }
 
-  res.json({ word: q, meaning: db[q] });
+  const entry = typeof db[q] === "string"
+    ? { meaning: db[q], imageUrl: "" }
+    : db[q] || {};
+
+  res.json({ word: q, meaning: entry.meaning || "", imageUrl: entry.imageUrl || "" });
 });
 
 /* ===== إضافة كلمة ===== */
 app.post("/api/words", (req, res) => {
-  const { word, meaning } = req.body;
+  const { word, meaning, imageUrl } = req.body;
   if (!word || !meaning) {
     return res.status(400).json({ error: "Missing data" });
   }
 
   const db = readDb();
-  db[word.trim()] = meaning.trim();
+  db[word.trim()] = {
+    meaning: meaning.trim(),
+    imageUrl: (imageUrl || "").trim(),
+  };
   writeDb(db);
 
   res.json({ success: true });
@@ -67,9 +74,21 @@ app.delete("/api/words/:word", (req, res) => {
 
 /* ===== تعديل كلمة ===== */
 app.put("/api/words/:word", (req, res) => {
-  const { meaning } = req.body;
+  const { meaning, imageUrl } = req.body || {};
   const db = readDb();
-  db[req.params.word] = meaning;
+  const current = db[req.params.word];
+  const currentEntry = typeof current === "string"
+    ? { meaning: current, imageUrl: "" }
+    : current || {};
+
+  const nextMeaning = typeof meaning === "string" && meaning.trim()
+    ? meaning.trim()
+    : (currentEntry.meaning || "");
+  const nextImageUrl = typeof imageUrl === "string"
+    ? imageUrl.trim()
+    : (currentEntry.imageUrl || "");
+
+  db[req.params.word] = { meaning: nextMeaning, imageUrl: nextImageUrl };
   writeDb(db);
   res.json({ success: true });
 });
