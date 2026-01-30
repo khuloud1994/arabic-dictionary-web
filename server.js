@@ -54,6 +54,14 @@ app.post("/api/words", (req, res) => {
 
   res.json({ success: true });
 });
+app.get("/api/words/all", (req, res) => {
+  const db = readDb();
+  const result = Object.keys(db).map(word => ({
+    word,
+    meaning: db[word]
+  }));
+  res.json(result);
+});
 
 // ===== Start server =====
 app.listen(PORT, () => {
