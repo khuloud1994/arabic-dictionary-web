@@ -106,6 +106,7 @@ function renderList(words) {
     const row = document.createElement("tr");
 
     const wordCell = document.createElement("td");
+    wordCell.className = "vertical-word";
     wordCell.textContent = word;
 
     const meaningCell = document.createElement("td");
@@ -162,8 +163,10 @@ function applySearchFilter() {
 }
 
 listEl?.addEventListener("click", async (e) => {
-  const editWord = e.target.getAttribute("data-edit");
-  const delWord = e.target.getAttribute("data-del");
+  const editBtn = e.target.closest("[data-edit]");
+  const delBtn = e.target.closest("[data-del]");
+  const editWord = editBtn ? editBtn.getAttribute("data-edit") : null;
+  const delWord = delBtn ? delBtn.getAttribute("data-del") : null;
 
   if (editWord) {
     const res = await fetch(`/api/words?query=${encodeURIComponent(editWord)}`);
