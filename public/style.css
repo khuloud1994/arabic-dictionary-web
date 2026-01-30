@@ -17,3 +17,43 @@ input {
 }
 
 .hidden { display: none; }
+
+.vertical-word {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  white-space: nowrap;
+}
+
+.result-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  text-align: right;
+}
+
+.result-image {
+  flex: 0 0 180px;
+}
+
+.result-image img {
+  max-width: 180px;
+  border-radius: 8px;
+}
+
+.result-text {
+  flex: 1;
+}
+
+@media (max-width: 600px) {
+  .result-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .result-image {
+    flex-basis: auto;
+    width: 100%;
+  }
+  .result-image img {
+    max-width: 100%;
+  }
+}

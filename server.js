@@ -5,9 +5,6 @@ const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const OPENAI_IMAGE_MODEL = process.env.OPENAI_IMAGE_MODEL || "gpt-image-1";
-const OPENAI_IMAGE_SIZE = process.env.OPENAI_IMAGE_SIZE || "1024x1024";
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
@@ -93,55 +90,6 @@ app.put("/api/words/:word", (req, res) => {
   res.json({ success: true });
 });
 
-/* ===== توليد صورة ===== */
-app.post("/api/images", async (req, res) => {
-  const { prompt } = req.body || {};
-
-  if (!prompt) {
-    return res.status(400).json({ error: "Missing prompt" });
-  }
-
-  if (!OPENAI_API_KEY) {
-    return res.status(500).json({ error: "OPENAI_API_KEY not configured" });
-  }
-
-  try {
-    const isDalle2 = OPENAI_IMAGE_MODEL === "dall-e-2";
-    const response = await fetch("https://api.openai.com/v1/images/generations", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: OPENAI_IMAGE_MODEL,
-        prompt,
-        n: 1,
-        size: OPENAI_IMAGE_SIZE,
-        ...(isDalle2 ? { response_format: "b64_json" } : {}),
-      }),
-    });
-
-    const data = await response.json().catch(() => ({}));
-
-    if (!response.ok) {
-      console.error("OpenAI image error:", response.status, data);
-      return res.status(response.status).json({
-        error: "Image generation failed",
-        details: data?.error || data,
-      });
-    }
-
-    const b64 = data?.data?.[0]?.b64_json;
-    if (!b64) {
-      return res.status(502).json({ error: "No image data returned" });
-    }
-
-    res.json({ imageDataUrl: `data:image/png;base64,${b64}` });
-  } catch (err) {
-    res.status(500).json({ error: "Image generation error" });
-  }
-});
 
 app.listen(PORT, () =>
   console.log(`✅ Server running on http://localhost:${PORT}`)
