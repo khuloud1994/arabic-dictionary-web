@@ -1,31 +1,37 @@
 const form = document.getElementById("addForm");
 const msg = document.getElementById("msg");
 
-form.addEventListener("submit", async (e) => {
+form.addEventListener("submit", (e) => {
   e.preventDefault();
+
+  const wordEl = document.getElementById("word");
+  const meaningEl = document.getElementById("meaning");
+
+  const word = (wordEl?.value || "").trim();
+  const meaning = (meaningEl?.value || "").trim();
+
   msg.textContent = "";
 
-  const word = document.getElementById("word").value.trim();
-  const meaning = document.getElementById("meaning").value.trim();
-
   if (!word || !meaning) {
-    msg.textContent = "الرجاء إدخال الكلمة والمعنى";
+    msg.textContent = "⚠️ الرجاء إدخال الكلمة والمعنى";
+    msg.style.color = "red";
     return;
   }
 
-  const res = await fetch("/api/words", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ word, meaning })
-  });
+  let words = JSON.parse(localStorage.getItem("my_dictionary")) || [];
 
-  const data = await res.json();
-
-  if (!res.ok) {
-    msg.textContent = data.error || "حدث خطأ";
+  // منع التكرار
+  if (words.some(w => (w.word || "").trim() === word)) {
+    msg.textContent = "⚠️ الكلمة موجودة مسبقًا";
+    msg.style.color = "orange";
     return;
   }
 
-  msg.textContent = "تم الحفظ ✅";
+  words.push({ word, meaning });
+  localStorage.setItem("my_dictionary", JSON.stringify(words));
+
+  msg.textContent = "✅ تم حفظ الكلمة بنجاح";
+  msg.style.color = "green";
+
   form.reset();
 });

@@ -1,3 +1,6 @@
+// الكلمات التي أضفتِها من صفحة add.html (خاصة بك)
+let myWords = JSON.parse(localStorage.getItem("my_dictionary")) || [] ;
+
 const form = document.getElementById("searchForm");
 const queryInput = document.getElementById("query");
 const wordDisp = document.getElementById("wordDisp");
@@ -7,6 +10,18 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const q = queryInput.value.trim();
+  // تحديث الكلمات المضافة (من add.html) كل مرة
+myWords = JSON.parse(localStorage.getItem("my_dictionary")) || [];
+
+// ابحثي أولاً في كلماتك الخاصة
+const found = myWords.find(item => item.word === q);
+
+if (found) {
+  wordDisp.textContent = `الكلمة: ${found.word}`;
+  meaningDisp.textContent = `المعنى: ${found.meaning}`;
+  return; // مهم: نوقف هنا ولا نذهب للسيرفر
+}
+
   wordDisp.textContent = "";
   meaningDisp.textContent = "";
 
