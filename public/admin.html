@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>لوحة الإدارة</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="nav-rose">
+    <div class="nav-wrapper">
+      <a class="brand-logo center">لوحة الإدارة</a>
+    </div>
+  </nav>
+
+  <div class="container" style="margin-top:40px;">
+    <div class="row">
+      <form id="adminForm" class="col s12">
+        <input id="originalWord" type="hidden" />
+
+        <div class="input-field col s12 m4">
+          <input id="word" type="text" placeholder="كلمة" />
+          <label for="word">كلمة</label>
+        </div>
+
+        <div class="input-field col s12 m5">
+          <input id="meaning" type="text" placeholder="المعنى" />
+          <label for="meaning">المعنى</label>
+        </div>
+
+        <div class="input-field col s12 m3">
+          <input id="imageUrl" type="text" placeholder="رابط الصورة (اختياري)" />
+          <label for="imageUrl">رابط الصورة</label>
+        </div>
+
+        <div class="file-field input-field col s12">
+          <div class="btn">
+            <span>رفع صورة</span>
+            <input id="imageFile" type="file" accept="image/*" />
+          </div>
+          <div class="file-path-wrapper">
+            <input class="file-path validate" type="text" placeholder="اختاري صورة من جهازك" />
+          </div>
+        </div>
+
+        <div class="col s12" style="margin-top:10px;">
+          <button class="btn waves-effect waves-light teal" type="submit">حفظ</button>
+          <button id="cancelEdit" class="btn-flat" type="button">إلغاء</button>
+          <span id="msg" style="margin-right:12px;"></span>
+        </div>
+      </form>
+    </div>
+
+    <div class="row">
+      <div class="col s12">
+        <h6>الكلمات الحالية</h6>
+        <ul id="adminList"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>
