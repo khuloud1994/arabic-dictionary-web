@@ -171,6 +171,18 @@ app.put("/api/words/:word", async (req, res) => {
   res.json({ success: true });
 });
 
+app.get("/api/health/db", async (req, res) => {
+  if (!pool) {
+    return res.json({ status: "ok", storage: "file" });
+  }
+  try {
+    await pool.query("SELECT 1");
+    res.json({ status: "ok", storage: "postgres" });
+  } catch (err) {
+    res.status(500).json({ status: "error", storage: "postgres" });
+  }
+});
+
 ensurePostgres()
   .then(() => {
     app.listen(PORT, () =>
