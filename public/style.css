@@ -29,6 +29,7 @@ input {
   align-items: center;
   gap: 18px;
   text-align: right;
+  flex-direction: row-reverse;
 }
 
 .result-image {
