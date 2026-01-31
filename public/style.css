@@ -32,11 +32,11 @@ input {
 }
 
 .result-image {
-  flex: 0 0 220px;
+  flex: 0 0 260px;
 }
 
 .result-image img {
-  max-width: 220px;
+  max-width: 260px;
   border-radius: 8px;
 }
 
